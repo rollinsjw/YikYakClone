@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PostTableViewController: UITableViewController, ComposeDelegate {
+class PostTableViewController: UITableViewController, ComposeDelegate, PostTableViewCellDelegate {
     
     var yaks = [Yak]()
     
@@ -22,15 +22,9 @@ class PostTableViewController: UITableViewController, ComposeDelegate {
             break
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,8 +47,12 @@ class PostTableViewController: UITableViewController, ComposeDelegate {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! PostTableViewCell
         
+        // Set delegate
+        cell.delegate = self
+        cell.indexPath = indexPath
+        
         let yak = yaks[indexPath.row]
-        cell.postTextLabel.text = yak.text
+        cell.textView.text = yak.text
         
         if let date = yak.timestamp {
             let calendar = NSCalendar.currentCalendar()
@@ -84,6 +82,8 @@ class PostTableViewController: UITableViewController, ComposeDelegate {
             cell.repliesLabel.text = "💬 Reply"
         }
         
+        cell.voteCountLabel.text = String(yaks[indexPath.row].netVoteCount)
+        
         return cell
     }
     
@@ -92,6 +92,20 @@ class PostTableViewController: UITableViewController, ComposeDelegate {
     func sendNewYak(yak: Yak) {
         yaks.append(yak)
         tableView.reloadData()
+    }
+    
+    // MARK: - PostTableViewCell delegate
+    
+    func didUpvoteCellAtIndexPath(indexPath: NSIndexPath) {
+        yaks[indexPath.row].netVoteCount += 1
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as? PostTableViewCell
+        cell?.voteCountLabel.text = String(yaks[indexPath.row].netVoteCount)
+    }
+    
+    func didDownvoteCellAtIndexPath(indexPath: NSIndexPath) {
+        yaks[indexPath.row].netVoteCount -= 1
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as? PostTableViewCell
+        cell?.voteCountLabel.text = String(yaks[indexPath.row].netVoteCount)
     }
     
     // MARK: - Navigation
@@ -103,6 +117,8 @@ class PostTableViewController: UITableViewController, ComposeDelegate {
                     composeVC.delegate = self
                 }
             }
+        } else if segue.identifier == "yakDetailSegue" {
+            
         }
     }
 

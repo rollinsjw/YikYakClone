@@ -28,6 +28,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
+    
+    override func viewDidAppear(animated: Bool) {
+        textView.becomeFirstResponder()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -39,12 +43,17 @@ class ComposeViewController: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func sendButtonPressed(sender: AnyObject) {
-        let newYak = Yak(text: textView.text, timestamp: NSDate())
-        delegate?.sendNewYak(newYak)
-        self.dismissViewControllerAnimated(true, completion: nil)
+        createNewYak(textView.text)
     }
     
+    // MARK: - UITextView delegate
+    
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        if text.containsString("\n") {
+            createNewYak(textView.text)
+            return false
+        }
+        
         let textLength = textView.text.characters.count + text.characters.count - range.length
         // range.length is 1 when deleting a character
         characterCountLabel.text = String(200 - textLength)
@@ -55,6 +64,13 @@ class ComposeViewController: UIViewController, UITextViewDelegate {
         }
     }
     
+    // MARK: - Actions
+    
+    func createNewYak(text: String) {
+        let newYak = Yak(text: text, timestamp: NSDate())
+        delegate?.sendNewYak(newYak)
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
     
     
     /*

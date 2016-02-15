@@ -12,10 +12,13 @@ class Yak: NSObject {
     var text: String?
     var timestamp: NSDate?
     var replies: [Reply]
+    var netVoteCount: Int
+    // MARK: - TODO: Votes
     
     init(text: String, timestamp: NSDate) {
         self.text = text
         self.timestamp = timestamp
         self.replies = [Reply]()
+        self.netVoteCount = 0
     }
 }

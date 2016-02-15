@@ -11,4 +11,5 @@ import UIKit
 class Reply: NSObject {
     var text: String?
     var timestamp: NSDate?
+    var netVoteCount: Int = 0
 }

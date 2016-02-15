@@ -8,11 +8,36 @@
 
 import UIKit
 
+protocol PostTableViewCellDelegate {
+    func didUpvoteCellAtIndexPath(indexPath: NSIndexPath)
+    func didDownvoteCellAtIndexPath(indexPath: NSIndexPath)
+}
+
 class PostTableViewCell: UITableViewCell {
 
-    @IBOutlet var postTextLabel: UILabel!
+    @IBOutlet var textView: UITextView! {
+        didSet {
+            textView.textContainer.lineFragmentPadding = 0
+            textView.textContainerInset = UIEdgeInsetsZero
+        }
+    }
     @IBOutlet var timeLabel: UILabel!
     @IBOutlet var repliesLabel: UILabel!
+    @IBOutlet var voteCountLabel: UILabel!
+    
+    var delegate: PostTableViewCellDelegate?
+    var indexPath: NSIndexPath?
+    
+    @IBAction func upvoteButtonPressed(sender: UIButton) {
+        if let indexPath = indexPath, delegate = delegate {
+            delegate.didUpvoteCellAtIndexPath(indexPath)
+        }
+    }
+    @IBAction func downvoteButtonPressed(sender: UIButton) {
+        if let indexPath = indexPath, delegate = delegate {
+            delegate.didDownvoteCellAtIndexPath(indexPath)
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
