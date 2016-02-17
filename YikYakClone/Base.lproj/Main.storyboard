@@ -584,7 +584,7 @@ so we are using UITextView</string>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="9oc-0e-ErX" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="2KV-ky-tGO"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="qrR-ug-4YO">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="qrR-ug-4YO">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.0" green="0.83921568629999999" blue="0.69803921570000005" alpha="1" colorSpace="calibratedRGB"/>
@@ -604,7 +604,7 @@ so we are using UITextView</string>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="8z7-JX-EHg" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="3dt-wG-txG"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="nOv-aS-bEw">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="nOv-aS-bEw">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.0" green="0.83921568629999999" blue="0.69803921570000005" alpha="1" colorSpace="calibratedRGB"/>
