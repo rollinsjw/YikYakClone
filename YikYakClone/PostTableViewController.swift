@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import CoreLocation
 
-class PostTableViewController: UITableViewController, ComposeDelegate, PostTableViewCellDelegate {
+class PostTableViewController: UITableViewController, CLLocationManagerDelegate, ComposeDelegate, PostTableViewCellDelegate {
     
     var yaks = [Yak]()
+    let locationManager = CLLocationManager()
+    var currentLocation: CLLocationCoordinate2D?
     
     @IBAction func segmentedControlValueChanged(sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
@@ -25,6 +28,13 @@ class PostTableViewController: UITableViewController, ComposeDelegate, PostTable
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.estimatedRowHeight = 60
+        tableView.rowHeight = UITableViewAutomaticDimension
+        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
     }
 
     override func didReceiveMemoryWarning() {
@@ -87,6 +97,25 @@ class PostTableViewController: UITableViewController, ComposeDelegate, PostTable
         return cell
     }
     
+    // MARK: - Table view delegate
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        performSegueWithIdentifier("yakDetailSegue", sender: indexPath)
+    }
+    
+    // MARK: - CLLocationManager delegate
+    
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if (locations.count > 0) {
+            if let location = locations.first {
+                print(location.coordinate)
+                currentLocation = location.coordinate
+            }
+        } else {
+            alert("Cannot fetch location.")
+        }
+    }
+    
     // MARK: - Compose delegate
     
     func sendNewYak(yak: Yak) {
@@ -118,8 +147,30 @@ class PostTableViewController: UITableViewController, ComposeDelegate, PostTable
                 }
             }
         } else if segue.identifier == "yakDetailSegue" {
-            
+            if let detailVC = segue.destinationViewController as? DetailViewController,
+                indexPath = sender as? NSIndexPath {
+                detailVC.yak = yaks[indexPath.row]
+                detailVC.delegate = self
+            }
         }
     }
+    
+    // MARK: - Private functions
+    
+    private func alert(message : String) {
+        let alert = UIAlertController(title: "Oops something went wrong.", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        let action = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+//        let cancel = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let settings = UIAlertAction(title: "Settings", style: .Default) { (_) -> Void in
+            let settingsUrl = NSURL(string: UIApplicationOpenSettingsURLString)
+            if let url = settingsUrl {
+                UIApplication.sharedApplication().openURL(url)
+            }
+        }
+        alert.addAction(settings)
+        alert.addAction(action)
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+
 
 }

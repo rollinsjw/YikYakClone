@@ -7,9 +7,18 @@
 //
 
 import UIKit
+import CoreLocation
 
 class Reply: NSObject {
-    var text: String?
+    var text: String
     var timestamp: NSDate?
-    var netVoteCount: Int = 0
+    var netVoteCount: Int
+    var location: CLLocationCoordinate2D?
+    
+    init(text: String, timestamp: NSDate?, location: CLLocationCoordinate2D?) {
+        self.text = text
+        self.timestamp = timestamp
+        self.netVoteCount = 0
+        self.location = location
+    }
 }

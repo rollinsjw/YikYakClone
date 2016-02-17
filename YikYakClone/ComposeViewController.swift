@@ -7,15 +7,18 @@
 //
 
 import UIKit
+import CoreLocation
 import KMPlaceholderTextView
 
 protocol ComposeDelegate {
     func sendNewYak(yak: Yak)
 }
 
-class ComposeViewController: UIViewController, UITextViewDelegate {
+class ComposeViewController: UIViewController, UITextViewDelegate, CLLocationManagerDelegate {
 
     var delegate: ComposeDelegate?
+    let locationManager = CLLocationManager()
+    var currentLocation: CLLocationCoordinate2D?
     
     @IBOutlet var textView: KMPlaceholderTextView! {
         didSet {
@@ -26,7 +29,11 @@ class ComposeViewController: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -64,12 +71,42 @@ class ComposeViewController: UIViewController, UITextViewDelegate {
         }
     }
     
+    // MARK: - CLLocationManager delegate
+    
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if (locations.count > 0) {
+            if let location = locations.first {
+                print(location.coordinate)
+                currentLocation = location.coordinate
+            }
+        } else {
+            alert("Cannot fetch location.")
+        }
+    }
+    
     // MARK: - Actions
     
     func createNewYak(text: String) {
-        let newYak = Yak(text: text, timestamp: NSDate())
+        let newYak = Yak(text: text, timestamp: NSDate(), location: currentLocation)
         delegate?.sendNewYak(newYak)
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // MARK: - Private functions
+    
+    private func alert(message : String) {
+        let alert = UIAlertController(title: "Oops, something went wrong.", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        let action = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+        //        let cancel = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let settings = UIAlertAction(title: "Settings", style: .Default) { (_) -> Void in
+            let settingsUrl = NSURL(string: UIApplicationOpenSettingsURLString)
+            if let url = settingsUrl {
+                UIApplication.sharedApplication().openURL(url)
+            }
+        }
+        alert.addAction(settings)
+        alert.addAction(action)
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     

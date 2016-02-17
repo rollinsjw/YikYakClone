@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class DetailViewController: UIViewController, UITableViewDataSource, PostTableViewCellDelegate {
 
     @IBOutlet var yakTextView: UITextView!
     @IBOutlet var voteCountLabel: UILabel!
@@ -18,7 +18,6 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet var tableView: UITableView! {
         didSet {
             tableView.dataSource = self
-            tableView.delegate = self
         }
     }
     
@@ -33,6 +32,10 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        navigationController?.toolbar.hidden = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,47 +56,60 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCellWithIdentifier("replyCell", forIndexPath: indexPath) as! PostTableViewCell
-//        
-//        // Set delegate
-//        cell.delegate = self
-//        cell.indexPath = indexPath
-//        
-//        let yak = yaks[indexPath.row]
-//        cell.textView.text = yak.text
-//        
-//        if let date = yak.timestamp {
-//            let calendar = NSCalendar.currentCalendar()
-//            let components = calendar.components([.Year, .WeekOfYear, .Day, .Hour, .Minute, .Second], fromDate: date, toDate: NSDate(), options: [])
-//            if components.year > 0 {
-//                cell.timeLabel.text = "\(components.year)y"
-//            } else if components.weekOfYear > 0 {
-//                cell.timeLabel.text = "\(components.weekOfYear)w"
-//            } else if components.day > 0 {
-//                cell.timeLabel.text = "\(components.day)d"
-//            } else if components.hour > 0 {
-//                cell.timeLabel.text = "\(components.hour)h"
-//            } else if components.minute > 0 {
-//                cell.timeLabel.text = "\(components.minute)m"
-//            } else if components.second > 0 {
-//                cell.timeLabel.text = "\(components.second)s"
-//            } else {
-//                cell.timeLabel.text = "Just now"
-//            }
-//        } else {
-//            cell.timeLabel.text = nil
-//        }
-//        
-//        if yak.replies.count > 0 {
-//            cell.repliesLabel.text = "💬 \(yak.replies.count) Replies"
-//        } else {
-//            cell.repliesLabel.text = "💬 Reply"
-//        }
-//        
-//        cell.voteCountLabel.text = String(yaks[indexPath.row].netVoteCount)
-//        
-//        return cell
+        let cell = tableView.dequeueReusableCellWithIdentifier("replyCell", forIndexPath: indexPath) as! ReplyTableViewCell
+        
+        // Set delegate
+        cell.delegate = self
+        cell.indexPath = indexPath
+        
+        let reply: Reply! = yak?.replies[indexPath.row]
+        
+        cell.textView.text = reply.text
+        
+        if let date = reply.timestamp {
+            let calendar = NSCalendar.currentCalendar()
+            let components = calendar.components([.Year, .WeekOfYear, .Day, .Hour, .Minute, .Second], fromDate: date, toDate: NSDate(), options: [])
+            if components.year > 0 {
+                cell.timeLabel.text = "\(components.year)y"
+            } else if components.weekOfYear > 0 {
+                cell.timeLabel.text = "\(components.weekOfYear)w"
+            } else if components.day > 0 {
+                cell.timeLabel.text = "\(components.day)d"
+            } else if components.hour > 0 {
+                cell.timeLabel.text = "\(components.hour)h"
+            } else if components.minute > 0 {
+                cell.timeLabel.text = "\(components.minute)m"
+            } else if components.second > 0 {
+                cell.timeLabel.text = "\(components.second)s"
+            } else {
+                cell.timeLabel.text = "Just now"
+            }
+        } else {
+            cell.timeLabel.text = nil
+        }
+        
+        cell.voteCountLabel.text = String(reply.netVoteCount)
+        
+        return cell
+    }
+    
+    // MARK: - PostTableViewCell delegate
+    
+    func didUpvoteCellAtIndexPath(indexPath: NSIndexPath) {
+        if let reply = yak?.replies[indexPath.row] {
+            reply.netVoteCount += 1
+            let cell = tableView.cellForRowAtIndexPath(indexPath) as? PostTableViewCell
+            cell?.voteCountLabel.text = String(reply.netVoteCount)
+        }
 
+    }
+    
+    func didDownvoteCellAtIndexPath(indexPath: NSIndexPath) {
+        if let reply = yak?.replies[indexPath.row] {
+            reply.netVoteCount -= 1
+            let cell = tableView.cellForRowAtIndexPath(indexPath) as? PostTableViewCell
+            cell?.voteCountLabel.text = String(reply.netVoteCount)
+        }
     }
     
     /*

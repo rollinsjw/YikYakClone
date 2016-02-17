@@ -7,18 +7,20 @@
 //
 
 import UIKit
+import CoreLocation
 
 class Yak: NSObject {
-    var text: String?
+    var text: String
     var timestamp: NSDate?
     var replies: [Reply]
     var netVoteCount: Int
-    // MARK: - TODO: Votes
+    var location: CLLocationCoordinate2D?
     
-    init(text: String, timestamp: NSDate) {
+    init(text: String, timestamp: NSDate?, location: CLLocationCoordinate2D?) {
         self.text = text
         self.timestamp = timestamp
         self.replies = [Reply]()
         self.netVoteCount = 0
+        self.location = location
     }
 }
