@@ -23,4 +23,17 @@ class Yak: NSObject {
         self.netVoteCount = 0
         self.location = location
     }
+    
+    //we need an initializer for turning a dictionary from firebase into an object
+    init(dictionary: Dictionary<String, AnyObject>){
+        self.text = dictionary["text"] as! String
+        self.replies = [Reply]()
+        self.netVoteCount = 0
+    }
+    
+    func toDictionary() -> Dictionary<String, AnyObject> {
+        return [
+            "text": text
+        ]
+    }
 }

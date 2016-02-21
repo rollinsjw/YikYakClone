@@ -22,7 +22,6 @@ class DetailViewController: UIViewController, UITableViewDataSource, PostTableVi
     }
     
     var yak: Yak?
-    var delegate: ComposeDelegate?
     
     @IBAction func shareButtonPressed(sender: UIButton) {
         // MARK: - TODO: Share Button

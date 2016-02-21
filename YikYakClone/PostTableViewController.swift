@@ -9,9 +9,8 @@
 import UIKit
 import CoreLocation
 
-class PostTableViewController: UITableViewController, CLLocationManagerDelegate, ComposeDelegate, PostTableViewCellDelegate {
+class PostTableViewController: UITableViewController, CLLocationManagerDelegate, PostTableViewCellDelegate, YakFeedDelegate {
     
-    var yaks = [Yak]()
     let locationManager = CLLocationManager()
     var currentLocation: CLLocationCoordinate2D?
     
@@ -28,6 +27,9 @@ class PostTableViewController: UITableViewController, CLLocationManagerDelegate,
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //set ourselves to be the yak feed delegate, so we get notified when yaks are added
+        YakCenter.sharedInstance.yakFeedDelegate = self
         
         tableView.estimatedRowHeight = 60
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -51,7 +53,7 @@ class PostTableViewController: UITableViewController, CLLocationManagerDelegate,
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return yaks.count
+        return yaks().count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -61,7 +63,7 @@ class PostTableViewController: UITableViewController, CLLocationManagerDelegate,
         cell.delegate = self
         cell.indexPath = indexPath
         
-        let yak = yaks[indexPath.row]
+        let yak = yaks()[indexPath.row]
         cell.textView.text = yak.text
         
         if let date = yak.timestamp {
@@ -92,7 +94,7 @@ class PostTableViewController: UITableViewController, CLLocationManagerDelegate,
             cell.repliesLabel.text = "💬 Reply"
         }
         
-        cell.voteCountLabel.text = String(yaks[indexPath.row].netVoteCount)
+        cell.voteCountLabel.text = String(yaks()[indexPath.row].netVoteCount)
         
         return cell
     }
@@ -116,43 +118,39 @@ class PostTableViewController: UITableViewController, CLLocationManagerDelegate,
         }
     }
     
-    // MARK: - Compose delegate
-    
-    func sendNewYak(yak: Yak) {
-        yaks.append(yak)
-        tableView.reloadData()
-    }
-    
     // MARK: - PostTableViewCell delegate
     
     func didUpvoteCellAtIndexPath(indexPath: NSIndexPath) {
-        yaks[indexPath.row].netVoteCount += 1
+        yaks()[indexPath.row].netVoteCount += 1
         let cell = tableView.cellForRowAtIndexPath(indexPath) as? PostTableViewCell
-        cell?.voteCountLabel.text = String(yaks[indexPath.row].netVoteCount)
+        cell?.voteCountLabel.text = String(yaks()[indexPath.row].netVoteCount)
     }
     
     func didDownvoteCellAtIndexPath(indexPath: NSIndexPath) {
-        yaks[indexPath.row].netVoteCount -= 1
+        yaks()[indexPath.row].netVoteCount -= 1
         let cell = tableView.cellForRowAtIndexPath(indexPath) as? PostTableViewCell
-        cell?.voteCountLabel.text = String(yaks[indexPath.row].netVoteCount)
+        cell?.voteCountLabel.text = String(yaks()[indexPath.row].netVoteCount)
     }
     
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "composeSegue" {
-            if let navigationController = segue.destinationViewController as? UINavigationController {
-                if let composeVC = navigationController.viewControllers.first as? ComposeViewController {
-                    composeVC.delegate = self
-                }
-            }
-        } else if segue.identifier == "yakDetailSegue" {
+        if segue.identifier == "yakDetailSegue" {
             if let detailVC = segue.destinationViewController as? DetailViewController,
                 indexPath = sender as? NSIndexPath {
-                detailVC.yak = yaks[indexPath.row]
-                detailVC.delegate = self
+                detailVC.yak = yaks()[indexPath.row]
             }
         }
+    }
+    
+    // MARK: Yak Feed Delegate
+    
+    func yakAddedToFeed() {
+        self.tableView.reloadData()
+    }
+    
+    func yaks() -> [Yak]{
+        return YakCenter.sharedInstance.allYaks
     }
     
     // MARK: - Private functions

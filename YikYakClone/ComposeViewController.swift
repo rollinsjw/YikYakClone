@@ -10,13 +10,8 @@ import UIKit
 import CoreLocation
 import KMPlaceholderTextView
 
-protocol ComposeDelegate {
-    func sendNewYak(yak: Yak)
-}
-
 class ComposeViewController: UIViewController, UITextViewDelegate, CLLocationManagerDelegate {
 
-    var delegate: ComposeDelegate?
     let locationManager = CLLocationManager()
     var currentLocation: CLLocationCoordinate2D?
     
@@ -88,7 +83,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, CLLocationMan
     
     func createNewYak(text: String) {
         let newYak = Yak(text: text, timestamp: NSDate(), location: currentLocation)
-        delegate?.sendNewYak(newYak)
+        YakCenter.sharedInstance.postYak(newYak)
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
