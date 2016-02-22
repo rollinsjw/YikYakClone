@@ -27,7 +27,7 @@ class YakCenter: NSObject {
     override init() {
         super.init()
         //we setup listeners for when remote data changes, this is the primary way of reading data via firebase
-        yakRef.queryOrderedByChild("timestamp").observeEventType(.Value) { (snapshot: FDataSnapshot!) -> Void in
+        yakRef.queryLimitedToFirst(50).queryOrderedByChild("timestamp").observeEventType(.Value) { (snapshot: FDataSnapshot!) -> Void in
             self.allYaks.removeAll()
             //here we get all of the yaks (children), convert them to snapshots, and make sure there is at least 1
             if let snapshots = snapshot.children.allObjects as? [FDataSnapshot]{

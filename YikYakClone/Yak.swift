@@ -29,7 +29,7 @@ class Yak: NSObject {
         self.text = dictionary["text"] as! String
         let timeInterval = dictionary["timestamp"] as? Double
         if (timeInterval != nil){
-            self.timestamp = NSDate(timeIntervalSince1970:timeInterval!)
+            self.timestamp = NSDate(timeIntervalSince1970:-1 * timeInterval!)
         }
         self.replies = [Reply]()
         self.netVoteCount = 0
@@ -38,7 +38,7 @@ class Yak: NSObject {
     func toDictionary() -> Dictionary<String, AnyObject> {
         return [
             "text": text,
-            "timestamp": timestamp!.timeIntervalSince1970,
+            "timestamp": -1 * timestamp!.timeIntervalSince1970,
             "votes": netVoteCount
         ]
     }
