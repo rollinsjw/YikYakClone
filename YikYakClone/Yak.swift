@@ -27,13 +27,19 @@ class Yak: NSObject {
     //we need an initializer for turning a dictionary from firebase into an object
     init(dictionary: Dictionary<String, AnyObject>){
         self.text = dictionary["text"] as! String
+        let timeInterval = dictionary["timestamp"] as? Double
+        if (timeInterval != nil){
+            self.timestamp = NSDate(timeIntervalSince1970:timeInterval!)
+        }
         self.replies = [Reply]()
         self.netVoteCount = 0
     }
     
     func toDictionary() -> Dictionary<String, AnyObject> {
         return [
-            "text": text
+            "text": text,
+            "timestamp": timestamp!.timeIntervalSince1970,
+            "votes": netVoteCount
         ]
     }
 }
