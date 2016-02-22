@@ -8,12 +8,14 @@
 
 import UIKit
 
-class DetailViewController: UIViewController, UITableViewDataSource, PostTableViewCellDelegate {
+class DetailViewController: UIViewController, UITableViewDataSource, PostTableViewCellDelegate, ReplyFeedDelegate {
 
     @IBOutlet var yakTextView: UITextView!
     @IBOutlet var voteCountLabel: UILabel!
     @IBOutlet var timeLabel: UILabel!
     @IBOutlet var repliesLabel: UILabel!
+    @IBOutlet var replyTextField: UITextField!
+    @IBOutlet var replyContainer: UIView!               //We use this to shift the reply box up when the keyboard is shown
     
     @IBOutlet var tableView: UITableView! {
         didSet {
@@ -27,8 +29,29 @@ class DetailViewController: UIViewController, UITableViewDataSource, PostTableVi
         // MARK: - TODO: Share Button
     }
     
+    @IBAction func postButtonPressed(sender: UIButton) {
+        let reply = Reply(text: replyTextField.text!, timestamp: NSDate(), location: nil)
+        YakCenter.sharedInstance.postReply(reply, yak: self.yak!)
+        //resignFirstResponder hides the keyboard
+        replyTextField.resignFirstResponder()
+        replyTextField.text = ""
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        YakCenter.sharedInstance.replyFeedDelegate = self
+        YakCenter.sharedInstance.subscribeToRepliesForYak(yak!)
+        
+        yakTextView.text = yak?.text
+        voteCountLabel.text = String(yak!.netVoteCount)
+        timeLabel.text = yak?.timestampToReadable()
+        
+        let replyText = yak!.replies.count == 1 ? "1 Reply" : "\(yak!.replies.count) Replies"
+        repliesLabel.text = replyText
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
 
         // Do any additional setup after loading the view.
     }
@@ -65,27 +88,7 @@ class DetailViewController: UIViewController, UITableViewDataSource, PostTableVi
         
         cell.textView.text = reply.text
         
-        if let date = reply.timestamp {
-            let calendar = NSCalendar.currentCalendar()
-            let components = calendar.components([.Year, .WeekOfYear, .Day, .Hour, .Minute, .Second], fromDate: date, toDate: NSDate(), options: [])
-            if components.year > 0 {
-                cell.timeLabel.text = "\(components.year)y"
-            } else if components.weekOfYear > 0 {
-                cell.timeLabel.text = "\(components.weekOfYear)w"
-            } else if components.day > 0 {
-                cell.timeLabel.text = "\(components.day)d"
-            } else if components.hour > 0 {
-                cell.timeLabel.text = "\(components.hour)h"
-            } else if components.minute > 0 {
-                cell.timeLabel.text = "\(components.minute)m"
-            } else if components.second > 0 {
-                cell.timeLabel.text = "\(components.second)s"
-            } else {
-                cell.timeLabel.text = "Just now"
-            }
-        } else {
-            cell.timeLabel.text = nil
-        }
+        cell.timeLabel.text = yak?.timestampToReadable()
         
         cell.voteCountLabel.text = String(reply.netVoteCount)
         
@@ -109,6 +112,24 @@ class DetailViewController: UIViewController, UITableViewDataSource, PostTableVi
             let cell = tableView.cellForRowAtIndexPath(indexPath) as? PostTableViewCell
             cell?.voteCountLabel.text = String(reply.netVoteCount)
         }
+    }
+    
+    // MARK: replyFeedDelegate
+    
+    func replyAddedToFeed() {
+        self.tableView.reloadData()
+    }
+    
+    // MARK: keyboard
+    
+    func keyboardWillAppear(notification: NSNotification){
+        let keyboardSize = (notification.userInfo![UIKeyboardFrameBeginUserInfoKey] as? NSValue)!.CGRectValue()
+        //we slide the reply box and send button up the size of the keyboard - the size of the bottom tab bar
+        replyContainer.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + self.tabBarController!.tabBar.frame.height)
+    }
+    
+    func keyboardWillDisappear(notification: NSNotification){
+        replyContainer.transform = CGAffineTransformIdentity
     }
     
     /*

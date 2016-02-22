@@ -66,27 +66,7 @@ class PostTableViewController: UITableViewController, CLLocationManagerDelegate,
         let yak = yaks()[indexPath.row]
         cell.textView.text = yak.text
         
-        if let date = yak.timestamp {
-            let calendar = NSCalendar.currentCalendar()
-            let components = calendar.components([.Year, .WeekOfYear, .Day, .Hour, .Minute, .Second], fromDate: date, toDate: NSDate(), options: [])
-            if components.year > 0 {
-                cell.timeLabel.text = "\(components.year)y"
-            } else if components.weekOfYear > 0 {
-                cell.timeLabel.text = "\(components.weekOfYear)w"
-            } else if components.day > 0 {
-                cell.timeLabel.text = "\(components.day)d"
-            } else if components.hour > 0 {
-                cell.timeLabel.text = "\(components.hour)h"
-            } else if components.minute > 0 {
-                cell.timeLabel.text = "\(components.minute)m"
-            } else if components.second > 0 {
-                cell.timeLabel.text = "\(components.second)s"
-            } else {
-                cell.timeLabel.text = "Just now"
-            }
-        } else {
-            cell.timeLabel.text = nil
-        }
+        cell.timeLabel.text = yak.timestampToReadable()
         
         if yak.replies.count > 0 {
             cell.repliesLabel.text = "💬 \(yak.replies.count) Replies"
