@@ -123,9 +123,14 @@ class DetailViewController: UIViewController, UITableViewDataSource, PostTableVi
     // MARK: keyboard
     
     func keyboardWillAppear(notification: NSNotification){
-        let keyboardSize = (notification.userInfo![UIKeyboardFrameBeginUserInfoKey] as? NSValue)!.CGRectValue()
-        //we slide the reply box and send button up the size of the keyboard - the size of the bottom tab bar
-        replyContainer.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + self.tabBarController!.tabBar.frame.height)
+        if let userInfo = notification.userInfo, keyboardSizeValue = userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue {
+            let keyboardSize = keyboardSizeValue.CGRectValue()
+            //we slide the reply box and send button up the size of the keyboard - the size of the bottom tab bar
+            if let tabBarController = self.tabBarController {
+                replyContainer.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + tabBarController.tabBar.frame.height)
+            }
+
+        }
     }
     
     func keyboardWillDisappear(notification: NSNotification){

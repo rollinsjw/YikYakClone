@@ -31,7 +31,7 @@ class PostTableViewController: UITableViewController, CLLocationManagerDelegate,
         //set ourselves to be the yak feed delegate, so we get notified when yaks are added
         YakCenter.sharedInstance.yakFeedDelegate = self
         
-        tableView.estimatedRowHeight = 60
+        tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locationManager.delegate = self
