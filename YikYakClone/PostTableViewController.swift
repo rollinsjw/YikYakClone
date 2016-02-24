@@ -11,10 +11,9 @@ import CoreLocation
 
 class PostTableViewController: UITableViewController, CLLocationManagerDelegate, PostTableViewCellDelegate, YakFeedDelegate {
     
-    let locationManager = CLLocationManager()
-    var currentLocation: CLLocationCoordinate2D?
-    
     @IBAction func segmentedControlValueChanged(sender: UISegmentedControl) {
+        //this is the segmented control to toggle between New and Hot
+        //it is connected but not implemented
         switch sender.selectedSegmentIndex {
         case 0:
             break
@@ -33,10 +32,6 @@ class PostTableViewController: UITableViewController, CLLocationManagerDelegate,
         
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
-        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
     }
 
     override func didReceiveMemoryWarning() {
@@ -83,19 +78,6 @@ class PostTableViewController: UITableViewController, CLLocationManagerDelegate,
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         performSegueWithIdentifier("yakDetailSegue", sender: indexPath)
-    }
-    
-    // MARK: - CLLocationManager delegate
-    
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if (locations.count > 0) {
-            if let location = locations.first {
-                print(location.coordinate)
-                currentLocation = location.coordinate
-            }
-        } else {
-            alert("Cannot fetch location.")
-        }
     }
     
     // MARK: - PostTableViewCell delegate
