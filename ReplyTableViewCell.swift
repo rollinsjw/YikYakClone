@@ -22,17 +22,6 @@ class ReplyTableViewCell: UITableViewCell {
     var delegate: PostTableViewCellDelegate?
     var indexPath: NSIndexPath?
     
-//    @IBAction func upvoteButtonPressed(sender: UIButton) {
-//        if let indexPath = indexPath, delegate = delegate {
-//            delegate.didUpvoteCellAtIndexPath(indexPath)
-//        }
-//    }
-//    @IBAction func downvoteButtonPressed(sender: UIButton) {
-//        if let indexPath = indexPath, delegate = delegate {
-//            delegate.didDownvoteCellAtIndexPath(indexPath)
-//        }
-//    }
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

@@ -11,9 +11,6 @@ import CoreLocation
 import KMPlaceholderTextView
 
 class ComposeViewController: UIViewController, UITextViewDelegate, CLLocationManagerDelegate {
-
-    let locationManager = CLLocationManager()
-    var currentLocation: CLLocationCoordinate2D?
     
     @IBOutlet var textView: KMPlaceholderTextView! {
         didSet {
@@ -24,11 +21,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, CLLocationMan
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -51,11 +43,13 @@ class ComposeViewController: UIViewController, UITextViewDelegate, CLLocationMan
     // MARK: - UITextView delegate
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        //check if the 'Done' button was pressed on the keyboard
         if text.containsString("\n") {
             createNewYak(textView.text)
             return false
         }
         
+        //limit length of Yak
         let textLength = textView.text.characters.count + text.characters.count - range.length
         // range.length is 1 when deleting a character
         characterCountLabel.text = String(200 - textLength)
@@ -66,23 +60,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, CLLocationMan
         }
     }
     
-    // MARK: - CLLocationManager delegate
-    
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if (locations.count > 0) {
-            if let location = locations.first {
-                print(location.coordinate)
-                currentLocation = location.coordinate
-            }
-        } else {
-            alert("Cannot fetch location.")
-        }
-    }
-    
     // MARK: - Actions
     
     func createNewYak(text: String) {
-        let newYak = Yak(text: text, timestamp: NSDate(), location: currentLocation)
+        let newYak = Yak(text: text, timestamp: NSDate(), location: nil)
         YakCenter.sharedInstance.postYak(newYak)
         self.dismissViewControllerAnimated(true, completion: nil)
     }

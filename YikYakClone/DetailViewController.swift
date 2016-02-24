@@ -39,10 +39,12 @@ class DetailViewController: UIViewController, UITableViewDataSource, PostTableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        replyTextField.autocorrectionType = .No
         
         YakCenter.sharedInstance.replyFeedDelegate = self
         YakCenter.sharedInstance.subscribeToRepliesForYak(yak!)
         
+        //display Yak info
         yakTextView.text = yak?.text
         voteCountLabel.text = String(yak!.netVoteCount)
         timeLabel.text = yak?.timestampToReadable()
@@ -50,6 +52,8 @@ class DetailViewController: UIViewController, UITableViewDataSource, PostTableVi
         let replyText = yak!.replies.count == 1 ? "1 Reply" : "\(yak!.replies.count) Replies"
         repliesLabel.text = replyText
         
+        //subscribe to notifications for when the keyboard appears and disappears
+        //we use these notifications to shift the comment box up and down as needed
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
 

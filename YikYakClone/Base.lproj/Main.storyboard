@@ -48,10 +48,10 @@
             </objects>
             <point key="canvasLocation" x="-992.5" y="-332.5"/>
         </scene>
-        <!--Home-->
+        <!--Post-->
         <scene sceneID="Ob1-sj-iDw">
             <objects>
-                <tableViewController id="nio-rZ-HTK" customClass="PostTableViewController" customModule="YikYakClone" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Post" id="nio-rZ-HTK" customClass="PostTableViewController" customModule="YikYakClone" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="100" sectionHeaderHeight="28" sectionFooterHeight="28" id="FJa-S1-aJo">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -214,10 +214,10 @@ so we are using UITextView</string>
             </objects>
             <point key="canvasLocation" x="150.5" y="-352.5"/>
         </scene>
-        <!--Yak-->
+        <!--Compose-->
         <scene sceneID="BmV-71-VT9">
             <objects>
-                <viewController id="CYF-ee-CDY" customClass="ComposeViewController" customModule="YikYakClone" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Compose" id="CYF-ee-CDY" customClass="ComposeViewController" customModule="YikYakClone" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="LNf-9a-7ga"/>
                         <viewControllerLayoutGuide type="bottom" id="tr7-hL-vNW"/>
@@ -318,10 +318,10 @@ so we are using UITextView</string>
             </objects>
             <point key="canvasLocation" x="162.5" y="479.5"/>
         </scene>
-        <!--Yak-->
+        <!--Detail-->
         <scene sceneID="tEv-QV-d9G">
             <objects>
-                <viewController id="zhh-p9-wJT" customClass="DetailViewController" customModule="YikYakClone" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Detail" id="zhh-p9-wJT" customClass="DetailViewController" customModule="YikYakClone" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="4Rm-v1-hOD"/>
                         <viewControllerLayoutGuide type="bottom" id="CAY-mf-gOR"/>
@@ -423,41 +423,6 @@ so we are using UITextView</string>
                                     <constraint firstAttribute="trailing" secondItem="k0f-8S-Mmp" secondAttribute="trailing" constant="16" id="utE-Ke-GOI"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cG7-61-TEd">
-                                <rect key="frame" x="-4" y="575" width="383" height="43"/>
-                                <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Yak Back..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gPf-2r-5YS">
-                                        <rect key="frame" x="8" y="7" width="321" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="rIj-1F-IEV"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sbr-WW-XSb">
-                                        <rect key="frame" x="334" y="6" width="36" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="36" id="2fh-0I-nJh"/>
-                                            <constraint firstAttribute="height" constant="30" id="ANy-Jz-FEg"/>
-                                        </constraints>
-                                        <state key="normal" title="Send">
-                                            <color key="titleColor" red="0.0" green="0.83921568629999999" blue="0.69803921570000005" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="postButtonPressed:" destination="zhh-p9-wJT" eventType="touchUpInside" id="3Th-qi-hfq"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="sbr-WW-XSb" firstAttribute="leading" secondItem="gPf-2r-5YS" secondAttribute="trailing" constant="5" id="1ZM-zO-U1f"/>
-                                    <constraint firstItem="gPf-2r-5YS" firstAttribute="leading" secondItem="cG7-61-TEd" secondAttribute="leading" constant="8" id="6e1-Tr-H09"/>
-                                    <constraint firstAttribute="bottom" secondItem="gPf-2r-5YS" secondAttribute="bottom" constant="6" id="Glm-T9-YLb"/>
-                                    <constraint firstAttribute="bottom" secondItem="sbr-WW-XSb" secondAttribute="bottom" constant="7" id="LO4-QF-0A1"/>
-                                    <constraint firstAttribute="height" constant="43" id="cux-ac-gJz"/>
-                                    <constraint firstAttribute="trailing" secondItem="sbr-WW-XSb" secondAttribute="trailing" constant="13" id="sY8-zl-QnJ"/>
-                                </constraints>
-                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Rya-kc-3L6">
                                 <rect key="frame" x="-4" y="243" width="383" height="336"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -552,6 +517,41 @@ so we are using UITextView</string>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cG7-61-TEd">
+                                <rect key="frame" x="-4" y="575" width="383" height="43"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Yak Back..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gPf-2r-5YS">
+                                        <rect key="frame" x="8" y="7" width="321" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="rIj-1F-IEV"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sbr-WW-XSb">
+                                        <rect key="frame" x="334" y="6" width="36" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="36" id="2fh-0I-nJh"/>
+                                            <constraint firstAttribute="height" constant="30" id="ANy-Jz-FEg"/>
+                                        </constraints>
+                                        <state key="normal" title="Send">
+                                            <color key="titleColor" red="0.0" green="0.83921568629999999" blue="0.69803921570000005" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="postButtonPressed:" destination="zhh-p9-wJT" eventType="touchUpInside" id="3Th-qi-hfq"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="sbr-WW-XSb" firstAttribute="leading" secondItem="gPf-2r-5YS" secondAttribute="trailing" constant="5" id="1ZM-zO-U1f"/>
+                                    <constraint firstItem="gPf-2r-5YS" firstAttribute="leading" secondItem="cG7-61-TEd" secondAttribute="leading" constant="8" id="6e1-Tr-H09"/>
+                                    <constraint firstAttribute="bottom" secondItem="gPf-2r-5YS" secondAttribute="bottom" constant="6" id="Glm-T9-YLb"/>
+                                    <constraint firstAttribute="bottom" secondItem="sbr-WW-XSb" secondAttribute="bottom" constant="7" id="LO4-QF-0A1"/>
+                                    <constraint firstAttribute="height" constant="43" id="cux-ac-gJz"/>
+                                    <constraint firstAttribute="trailing" secondItem="sbr-WW-XSb" secondAttribute="trailing" constant="13" id="sY8-zl-QnJ"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -616,7 +616,7 @@ so we are using UITextView</string>
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="W4R-Kk-AnI" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="JXN-VC-P2W">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="JXN-VC-P2W">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.0" green="0.83921568629999999" blue="0.69803921570000005" alpha="1" colorSpace="calibratedRGB"/>

@@ -54,7 +54,7 @@ class PostTableViewController: UITableViewController, CLLocationManagerDelegate,
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! PostTableViewCell
         
-        // Set delegate
+        // Set delegate to get notified when the cell's upvote or downvote buttons are tapped
         cell.delegate = self
         cell.indexPath = indexPath
         
@@ -77,6 +77,7 @@ class PostTableViewController: UITableViewController, CLLocationManagerDelegate,
     // MARK: - Table view delegate
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        //this is where we push to the Yak scene to show details about a Yak and the replies it has
         performSegueWithIdentifier("yakDetailSegue", sender: indexPath)
     }
     
@@ -100,6 +101,7 @@ class PostTableViewController: UITableViewController, CLLocationManagerDelegate,
         if segue.identifier == "yakDetailSegue" {
             if let detailVC = segue.destinationViewController as? DetailViewController,
                 indexPath = sender as? NSIndexPath {
+                //here is how we let the Yak scene know what Yak it needs to display
                 detailVC.yak = yaks()[indexPath.row]
             }
         }
