@@ -35,7 +35,7 @@ class YakCenter: NSObject {
     override init() {
         super.init()
         //we setup listeners for when remote data changes, this is the primary way of reading data via firebase
-        yakRef.queryOrderedByChild("timestamp").observeEventType(.Value) { (snapshot: FDataSnapshot!) -> Void in
+        yakRef.queryOrderedByChild("timestamp").observeEventType(.Value, withBlock: { snapshot in
             self.allYaks.removeAll()
             //here we get all of the yaks (children), convert them to snapshots, and make sure there is at least 1
             if let snapshots = snapshot.children.allObjects as? [FDataSnapshot]{
@@ -44,7 +44,7 @@ class YakCenter: NSObject {
                 }
             }
             self.yakFeedDelegate?.yakAddedToFeed()
-        }
+        })
     }
     
     func subscribeToRepliesForYak(yak: Yak){
@@ -52,7 +52,7 @@ class YakCenter: NSObject {
         if (subscribedReplyHandle != nil){
             replyRef.removeObserverWithHandle(subscribedReplyHandle!)
         }
-        subscribedReplyHandle = replyRef.childByAppendingPath(yak.snapshot!.key).observeEventType(.Value) { (snapshot: FDataSnapshot!) -> Void in
+        subscribedReplyHandle = replyRef.childByAppendingPath(yak.snapshot!.key).observeEventType(.Value, withBlock: { snapshot in
             yak.replies.removeAll()
             //here we get all of the replies (children), convert them to snapshots, and make sure there is at least 1
             if let snapshots = snapshot.children.allObjects as? [FDataSnapshot]{
@@ -61,7 +61,7 @@ class YakCenter: NSObject {
                 }
             }
             self.replyFeedDelegate?.replyAddedToFeed()
-        }
+        })
     }
     
     func postYak(yak: Yak){
