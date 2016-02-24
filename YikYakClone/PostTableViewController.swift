@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class PostTableViewController: UITableViewController, CLLocationManagerDelegate, PostTableViewCellDelegate, YakFeedDelegate {
+class PostTableViewController: UITableViewController, CLLocationManagerDelegate, PostTableViewCellDelegate {
     
     @IBAction func segmentedControlValueChanged(sender: UISegmentedControl) {
         //this is the segmented control to toggle between New and Hot
@@ -26,9 +26,6 @@ class PostTableViewController: UITableViewController, CLLocationManagerDelegate,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //set ourselves to be the yak feed delegate, so we get notified when yaks are added
-        YakCenter.sharedInstance.yakFeedDelegate = self
         
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -107,14 +104,10 @@ class PostTableViewController: UITableViewController, CLLocationManagerDelegate,
         }
     }
     
-    // MARK: Yak Feed Delegate
-    
-    func yakAddedToFeed() {
-        self.tableView.reloadData()
-    }
-    
     func yaks() -> [Yak]{
-        return YakCenter.sharedInstance.allYaks
+        let sampleYak = Yak(text: "Wow this weather is crazy.", timestamp: NSDate(), location: nil)
+        sampleYak.replies.append(Reply(text: "I agree", timestamp: NSDate(), location: nil))
+        return [sampleYak]
     }
     
     // MARK: - Private functions

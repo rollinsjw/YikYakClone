@@ -64,7 +64,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, CLLocationMan
     
     func createNewYak(text: String) {
         let newYak = Yak(text: text, timestamp: NSDate(), location: nil)
-        YakCenter.sharedInstance.postYak(newYak)
+        //TODO: what to do with the Yak?
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
