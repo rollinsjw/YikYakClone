@@ -24,24 +24,5 @@ class Reply: NSObject {
         self.location = location
     }
     
-    //we need an initializer for turning a dictionary from firebase into an object
-    init(dictionary: Dictionary<String, AnyObject>, snapshot: FDataSnapshot){
-        self.text = dictionary["text"] as! String
-        let timeInterval = dictionary["timestamp"] as? Double
-        if (timeInterval != nil){
-            self.timestamp = NSDate(timeIntervalSince1970:-1 * timeInterval!)
-        }
-        self.netVoteCount = 0
-        self.snapshot = snapshot
-    }
-    
-    func toDictionary() -> Dictionary<String, AnyObject> {
-        return [
-            "text": text,
-            "timestamp": -1 * timestamp!.timeIntervalSince1970,
-            "votes": netVoteCount
-        ]
-    }
-    
     
 }
