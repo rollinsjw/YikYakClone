@@ -115,12 +115,6 @@ class DetailViewController: UIViewController, UITableViewDataSource, PostTableVi
         }
     }
     
-    // MARK: replyFeedDelegate
-    
-    func replyAddedToFeed() {
-        self.tableView.reloadData()
-    }
-    
     // MARK: keyboard
     
     func keyboardWillAppear(notification: NSNotification){
